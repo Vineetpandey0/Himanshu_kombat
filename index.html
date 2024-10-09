@@ -5,30 +5,59 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Himanshu Kombat</title>
     <style>
-        body { text-align: center; font-family: Arial, sans-serif; }
-        #game { margin: 20px auto; width: 300px; height: 300px; border: 1px solid #000; }
-        #score { font-size: 24px; }
-        #currency { font-size: 24px; }
+        body { font-family: Arial, sans-serif; background-color: #f0f0f0; }
+        #game { width: 600px; margin: auto; border: 2px solid #333; padding: 20px; background-color: #fff; }
+        .character { width: 100px; height: 100px; display: inline-block; margin-right: 20px; }
+        .health { font-size: 20px; }
+        button { padding: 10px 15px; margin-top: 10px; cursor: pointer; }
     </style>
 </head>
 <body>
-    <h1>Himanshu Kombat</h1>
-    <div id="game"></div>
-    <p id="score">Score: 0</p>
-    <p id="currency">Negi Coins: 0</p>
-    <script>
-        let score = 0;
-        let negiCoins = 0;
-        const game = document.getElementById('game');
-        const scoreDisplay = document.getElementById('score');
-        const currencyDisplay = document.getElementById('currency');
 
-        game.addEventListener('click', () => {
-            score++;
-            negiCoins += 10; // Earn 10 Negi Coins per tap
-            scoreDisplay.textContent = 'Score: ' + score;
-            currencyDisplay.textContent = 'Negi Coins: ' + negiCoins;
-        });
-    </script>
+<div id="game">
+    <h1>Himanshu Kombat</h1>
+    <div id="characters">
+        <div class="character" id="player">👤<br><span class="health">Health: <span id="playerHealth">100</span></span></div>
+        <div class="character" id="enemy">👹<br><span class="health">Health: <span id="enemyHealth">100</span></span></div>
+    </div>
+    <button onclick="attack()">Attack!</button>
+    <p id="message"></p>
+</div>
+
+<script>
+let playerHealth = 100;
+let enemyHealth = 100;
+
+function attack() {
+    const playerDamage = Math.floor(Math.random() * 20) + 5;
+    const enemyDamage = Math.floor(Math.random() * 20) + 5;
+
+    enemyHealth -= playerDamage;
+    playerHealth -= enemyDamage;
+
+    document.getElementById('playerHealth').innerText = playerHealth;
+    document.getElementById('enemyHealth').innerText = enemyHealth;
+
+    let message = You dealt ${playerDamage} damage! Enemy dealt ${enemyDamage} damage!;
+    
+    if (playerHealth <= 0 && enemyHealth <= 0) {
+        message += " It's a draw!";
+        endGame();
+    } else if (playerHealth <= 0) {
+        message += " You lost!";
+        endGame();
+    } else if (enemyHealth <= 0) {
+        message += " You won!";
+        endGame();
+    }
+
+    document.getElementById('message').innerText = message;
+}
+
+function endGame() {
+   document.querySelector("button").disabled = true;
+}
+</script>
+
 </body>
 </html>
